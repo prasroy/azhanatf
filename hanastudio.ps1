@@ -9,7 +9,7 @@ param (
     $hanastudioUri = $baseUri + "/SapBits/SAP_HANA_STUDIO/IMC_STUDIO2_236_0-80000323.SAR" 
     $jreUri = $baseUri + "/SapBits/SAP_HANA_STUDIO/jre-10.0.2_windows-x64_bin.tar.gz"
     $puttyUri = "https://the.earth.li/~sgtatham/putty/latest/w64/putty-64bit-0.70-installer.msi"
-    $7zUri = "http://www.7-zip.org/a/7z1701-x64.msi"
+    $7zUri = "https://www.7-zip.org/a/7z1900-x64.msi"
     $sapcardest = "C:\SapBits\SAP_HANA_STUDIO\sapcar_win.exe.EXE"
     $hanastudiodest = "C:\SapBits\SAP_HANA_STUDIO\IMC_STUDIO2_236_0-80000323.SAR"
     $jredest = "C:\Program Files\jre-10.0.2_windows-x64_bin.tar.gz"
@@ -41,9 +41,9 @@ param (
     .\putty-64bit-0.70-installer.msi /quiet
     
     write-host "extracting and installing HANA Studio"
-    .\sapcar_win.exe.EXE -xfv IMC_STUDIO2_212_2-80000323.SAR
+    .\sapcar_win.exe.EXE -xfv IMC_STUDIO2_236_0-80000323.SAR
     
-    set PATH=%PATH%C:\Program Files\jdk-9.0.1\bin;
-    set HDB_INSTALLER_TRACE_FILE=C:\Users\testuser\Documents\hdbinst.log
+    set PATH=%PATH%C:\Program Files\jre-10.0.2\bin;
+    set HDB_INSTALLER_TRACE_FILE=C:\Users\clouduser\Documents\hdbinst.log
     cd C:\SAPbits\SAP_HANA_STUDIO\SAP_HANA_STUDIO\
     .\hdbinst.exe -a C:\SAPbits\SAP_HANA_STUDIO\SAP_HANA_STUDIO\studio -b --path="C:\Program Files\sap\hdbstudio"
