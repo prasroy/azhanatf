@@ -26,15 +26,15 @@ M128ms | 3.8TB | 5 x P30 | 2 x P20 | 1 x P30 | 1 x P6 | 1 x P6 | 5 x P50
 ## Installation Media
 Installation media for SAP HANA should be downloaded and placed in the SapBits folder. You will need to provide the URI for the container where they are stored, for example https://yourBlobName.blob.core.windows.net/yourContainerName. Specifically you need to download SAP package 51053061, which should consist of four files:
 ```
-51053061_part1.exe
-51053061_part2.rar
-51053061_part3.rar
-51053061_part4.rar
+51053381_part1.exe
+51053381_part2.rar
+51053381_part3.rar
+51053381_part4.rar
 ```
 
 Addtionally, if you wish to install a Windows-based Jumpbox with HANA Studio enabled, create a SAP_HANA_STUDIO folder under your SapBits folder and place the following packages:
 ```
 
-IMC_STUDIO2_212_2-80000323.SAR
+IMC_STUDIO2_236_0-80000323.SAR
 sapcar.exe
-serverjre-9.0.1_windows-x64_bin.tar.gz
+jre-10.0.2_windows-x64_bin.tar.gz
