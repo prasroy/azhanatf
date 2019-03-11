@@ -3,7 +3,7 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "VMName": {
-            "value": "hanademoVm"
+            "value": "hanademovm"
         },
         "HANAJumpbox": {
             "value": "yes"
@@ -36,16 +36,16 @@
             "value": "clouduser"
         },
         "VMPassword": {
-            "value": "C0bra4Real"
+            "value": "Hana07061992!"
                         },                    
         "OperatingSystem": {
             "value":  "SLES for SAP 12 SP3"
         },
         "HANASID": {
-            "value":  "H10"
+            "value":  "H01"
         },
         "HANANumber": {
-            "value": "00"
+            "value": "01"
         },
         "ExistingNetworkResourceGroup": {
             "value": "no"
