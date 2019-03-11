@@ -1,0 +1,432 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "vmName1": {
+            "type": "string",
+            "metadata": {
+                "description": "VM Name"
+            }
+        },
+        "vmName2": {
+            "type": "string",
+            "metadata": {
+                "description": "VM Name 2"
+            }
+        },
+        "customUri": {
+            "type": "string",
+            "metadata": {
+                "description": "Uri for SAP Bits"
+            }
+        },
+        "HANAsubnetRef": {
+            "type": "string",
+            "metadata": {
+                "description": "The Hana subnet reference ID"
+            }
+        },
+        "OperatingSystem": {
+            "type": "string",
+            "metadata": {
+                "description": "Operating system for HANA Machine"
+            },
+            "defaultValue": "SLES for SAP 12 SP3",
+            "allowedValues": [
+                "SLES for SAP 12 SP3",
+                "SLES for SAP 12 SP2",
+                "RHEL 7.2 for SAP HANA"
+            ]
+        },
+        "vmUserName": {
+            "type": "string",
+            "metadata": {
+                "description": "Username for the Virtual Machine"
+            },
+            "defaultValue": "testuser"
+        },
+        "vmPassword": {
+            "type": "securestring",
+            "metadata": {
+                "description": "Password for the Virtual Machine"
+            },
+            "defaultValue": "Hana07061992!"
+        },
+        "hanaSid": {
+            "type": "string",
+            "metadata": {
+                "description": "SAP HANA System ID"
+            },
+            "defaultValue": "H10"
+        },
+        "hanaNumber": {
+            "type": "string",
+            "metadata": {
+                "description": "SAP HANA Instance Number"
+            },
+            "defaultValue": "00"
+        },
+        "vmSize": {
+            "type": "string",
+            "metadata": {
+                "description": "Size of VM to deploy"
+            }
+        },
+        "IPAllocationMethod": {
+            "type": "string",
+            "defaultValue": "Static",
+            "allowedValues": [
+                "Dynamic",
+                "Static"
+            ],
+            "metadata": {
+                "description": "IP Allocation Method"
+            }
+        },
+        "StaticIP1": {
+            "type": "string",
+            "metadata": {
+                "description": "IP Address for the HANA VM when Static IP Allocation Method has been selected"
+            },
+            "defaultValue": "10.0.5.4"
+        },
+        "StaticIP2": {
+            "type": "string",
+            "metadata": {
+                "description": "IP Address for the other HANA VM when Static IP Allocation Method has been selected"
+            },
+            "defaultValue": "10.0.5.5"
+        },
+        "HSRINST": {
+            "type": "string",
+            "metadata": {
+                "description": "Should we configure HSR for the VM"
+            },
+            "defaultValue": "no",
+            "allowedValues": [
+                "yes",
+                "no"
+            ]
+        },
+        "ISPRIMARY": {
+            "type": "string",
+            "metadata": {
+                "description": "Is this the primary HANA instance"
+            },
+            "defaultValue": "yes",
+            "allowedValues": [
+                "yes",
+                "no"
+            ]
+        },
+        "repoUri": {
+            "type": "string",
+            "metadata": {
+                "description": "URI to scripts repo"
+            },
+            "defaultValue": "no"
+        },
+        "ISCSIIP": {
+            "type": "string",
+            "metadata": {
+                "description": "IP Address for machine providing ISCSI storage"
+            },
+            "defaultValue": "10.0.6.4"
+        },
+        "loadBalancerName": {
+            "type": "string",
+            "metadata": {
+                "description": "load balancer name"
+            },
+            "defaultValue": "hanalb"
+        },
+        "LBIP": {
+            "type": "string",
+            "metadata": {
+                "description": "IP Address for the internal load balancer"
+            },
+            "defaultValue": "10.0.5.10"
+        },
+        "SubscriptionEmail": {
+            "type": "string",
+            "metadata": {
+                "description": "OS Subscription Email for BYOS, blank for PAYG"
+            },
+            "defaultValue": ""
+        },
+        "SubscriptionID": {
+            "type": "string",
+            "metadata": {
+                "description": "OS Subscription ID for BYOS, blank for PAYG"
+            },
+            "defaultValue": ""
+        },
+        "SMTUri": {
+            "type": "string",
+            "metadata": {
+                "description": "SMT URI, blank for none"
+            },
+            "defaultValue": ""
+        },
+        "avSetObj": {
+            "type": "object",
+            "metadata": {
+                "description": "Availability set."
+            }
+        }
+    },
+    "variables": {
+        "api-version": "2017-06-01",
+        "api-version-vm": "2017-03-30",
+        "mode": "Push",
+        "nicName": "[if (equals(parameters('IPAllocationMethod'),'Static'), concat(parameters('vmName1'),'-static'), concat(parameters('vmName1'),'-dynamic'))]",
+        "subnetRef": "[parameters('HANASubnetRef')]",
+        "OperatingSystemSpec": {
+            "imagePublisher": "[if (contains(parameters('OperatingSystem'),'SLES'),'SUSE','RedHat')]",
+            "imageOffer": "[if (contains(parameters('OperatingSystem'),'SLES'),if (contains(parameters('SubscriptionEmail'),'@'),'SLES-SAP-BYOS','SLES-SAP'),'RHEL-SAP-HANA')]",
+            "sku": "[if (contains(parameters('OperatingSystem'),'12 SP3'),'12-SP3',if (contains(parameters('OperatingSystem'),'12 SP2'),'12-SP2','7.2'))]"
+        },
+        "diskConfig": "[variables(concat('diskConfig_', parameters('vmSize')))]",
+        "diskConfig_Standard_E16s_v3": {
+            "shared": 511,
+            "sap": 63,
+            "backup": 255,
+            "data1": 511,
+            "data2": 511
+        },
+        "diskConfig_Standard_E32s_v3": {
+            "shared": 511,
+            "sap": 63,
+            "backup": 511,
+            "data1": 511,
+            "data2": 511
+        },
+        "diskConfig_Standard_E64s_v3": {
+            "shared": 511,
+            "sap": 63,
+            "backup": 1023,
+            "data1": 511,
+            "data2": 511
+        },
+        "diskConfig_Standard_GS5": {
+            "shared": 511,
+            "sap": 63,
+            "backup": 1023,
+            "data1": 511,
+            "data2": 511
+        },
+        "internalAVSetObj": "[parameters('avSetObj')]"
+    },
+    "resources": [
+        {
+            "condition": "[equals(parameters('IPAllocationMethod'), 'Dynamic')]",
+            "apiVersion": "[variables('api-version')]",
+            "type": "Microsoft.Network/networkInterfaces",
+            "name": "[concat(parameters('vmName1'),'-dynamic')]",
+            "location": "[resourceGroup().location]",
+            "properties": {
+                "enableAcceleratedNetworking": false,
+                "ipConfigurations": [
+                    {
+                        "name": "ipconfig1",
+                        "properties": {
+                            "privateIPAllocationMethod": "Dynamic",
+                            "subnet": {
+                                "id": "[variables('subnetRef')]"
+                            }
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "condition": "[equals(parameters('IPAllocationMethod'), 'Static')]",
+            "apiVersion": "[variables('api-version')]",
+            "type": "Microsoft.Network/networkInterfaces",
+            "name": "[concat(parameters('vmName1'),'-static')]",
+            "location": "[resourceGroup().location]",
+            "properties": {
+                "enableAcceleratedNetworking": false,
+                "ipConfigurations": [
+                    {
+                        "name": "ipconfig1",
+                        "properties": {
+                            "privateIPAllocationMethod": "Static",
+                            "privateIPAddress": "[parameters('StaticIP1')]",
+                            "subnet": {
+                                "id": "[variables('subnetRef')]"
+                            },
+                            "loadBalancerBackendAddressPools": [
+                                {
+                                    "id": "[concat(resourceId('Microsoft.Network/loadBalancers', parameters('loadBalancerName')), '/backendAddressPools/BackendPool1')]"
+                                }
+                            ]
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "type": "Microsoft.Compute/disks",
+            "name": "[concat(parameters('vmName1'),'-shared')]",
+            "apiVersion": "2018-04-01",
+            "location": "[resourceGroup().location]",
+            "sku": {
+                "name": "Standard_LRS",
+                "tier": "Standard"
+            },
+            "properties": {
+                "creationData": {
+                    "createOption": "Empty"
+                },
+                "diskSizeGB": "[variables('diskConfig').shared]"
+            }
+        },
+        {
+            "type": "Microsoft.Compute/disks",
+            "name": "[concat(parameters('vmName1'),'-sap')]",
+            "apiVersion": "2018-04-01",
+            "location": "[resourceGroup().location]",
+            "sku": {
+                "name": "Standard_LRS",
+                "tier": "Standard"
+            },
+            "properties": {
+                "creationData": {
+                    "createOption": "Empty"
+                },
+                "diskSizeGB": "[variables('diskConfig').sap]"
+            }
+        },
+        {
+            "type": "Microsoft.Compute/disks",
+            "name": "[concat(parameters('vmName1'),'-backup1')]",
+            "apiVersion": "2018-04-01",
+            "location": "[resourceGroup().location]",
+            "sku": {
+                "name": "Standard_LRS",
+                "tier": "Standard"
+            },
+            "properties": {
+                "creationData": {
+                    "createOption": "Empty"
+                },
+                "diskSizeGB": "[variables('diskConfig').backup]"
+            }
+        },
+        {
+            "type": "Microsoft.Compute/disks",
+            "name": "[concat(parameters('vmName1'),'-data1')]",
+            "apiVersion": "2018-04-01",
+            "location": "[resourceGroup().location]",
+            "sku": {
+                "name": "Premium_LRS",
+                "tier": "Premium"
+            },
+            "properties": {
+                "creationData": {
+                    "createOption": "Empty"
+                },
+                "diskSizeGB": "[variables('diskConfig').data1]"
+            }
+        },
+        {
+            "type": "Microsoft.Compute/disks",
+            "name": "[concat(parameters('vmName1'),'-data2')]",
+            "apiVersion": "2018-04-01",
+            "location": "[resourceGroup().location]",
+            "sku": {
+                "name": "Premium_LRS",
+                "tier": "Premium"
+            },
+            "properties": {
+                "creationData": {
+                    "createOption": "Empty"
+                },
+                "diskSizeGB": "[variables('diskConfig').data2]"
+            }
+        },
+        {
+            "apiVersion": "[variables('api-version-vm')]",
+            "type": "Microsoft.Compute/virtualMachines",
+            "name": "[parameters('vmName1')]",
+            "location": "[resourceGroup().location]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/networkInterfaces',variables('nicName'))]",
+                "[resourceId('Microsoft.Compute/disks/', concat(parameters('vmName1'),'-shared'))]",
+                "[resourceId('Microsoft.Compute/disks/', concat(parameters('vmName1'),'-sap'))]",
+                "[resourceId('Microsoft.Compute/disks/', concat(parameters('vmName1'),'-backup1'))]",
+                "[resourceId('Microsoft.Compute/disks/', concat(parameters('vmName1'),'-data1'))]",
+                "[resourceId('Microsoft.Compute/disks/', concat(parameters('vmName1'),'-data2'))]"
+            ],
+            "properties": {
+                "availabilitySet": "[variables('internalAVSetObj')]",
+                "hardwareProfile": {
+                    "vmSize": "[parameters('vmSize')]"
+                },
+                "osProfile": {
+                    "computerName": "[parameters('vmName1')]",
+                    "adminUsername": "[parameters('vmUserName')]",
+                    "adminPassword": "[parameters('vmPassword')]"
+                },
+                "storageProfile": {
+                    "imageReference": {
+                        "publisher": "[variables('OperatingSystemSpec').imagePublisher]",
+                        "offer": "[variables('OperatingSystemSpec').imageOffer]",
+                        "sku": "[variables('OperatingSystemSpec').sku]",
+                        "version": "latest"
+                    },
+                    "osDisk": {
+                        "createOption": "FromImage"
+                    },
+                    "dataDisks": [
+                        {
+                            "lun": 0,
+                            "createOption": "attach",
+                            "managedDisk": {
+                                "id": "[resourceId('Microsoft.Compute/disks/', concat(parameters('vmName1'),'-shared'))]"
+                            }
+                        },
+                        {
+                            "lun": 1,
+                            "createOption": "attach",
+                            "managedDisk": {
+                                "id": "[resourceId('Microsoft.Compute/disks/', concat(parameters('vmName1'),'-sap'))]"
+                            }
+                        },
+                        {
+                            "lun": 2,
+                            "createOption": "attach",
+                            "managedDisk": {
+                                "id": "[resourceId('Microsoft.Compute/disks/', concat(parameters('vmName1'),'-backup1'))]"
+                            }
+                        },
+                        {
+                            "lun": 3,
+                            "createOption": "attach",
+                            "managedDisk": {
+                                "id": "[resourceId('Microsoft.Compute/disks/', concat(parameters('vmName1'),'-data1'))]"
+                            }
+                        },
+                        {
+                            "lun": 4,
+                            "createOption": "attach",
+                            "managedDisk": {
+                                "id": "[resourceId('Microsoft.Compute/disks/', concat(parameters('vmName1'),'-data2'))]"
+                            }
+                        }
+                    ]
+                },
+                "networkProfile": {
+                    "networkInterfaces": [
+                        {
+                            "id": "[resourceId('Microsoft.Network/networkInterfaces',variables('nicName'))]"
+                        }
+                    ]
+                }
+            },
+            "resources": []
+        }
+    ],
+    "outputs": {}
+}
