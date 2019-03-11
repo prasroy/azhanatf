@@ -11,7 +11,6 @@
             "allowedValues": [
                 "SAP HANA PLATFORM EDITION 2.0 SPS01 REV 10 (51052030)",
                 "SAP HANA PLATFORM EDITION 2.0 SPS02 (51052325)",
-                "SAP HANA PLATFORM EDITION 2.0 SPS03 REV30 (51053061)",
                 "SAP HANA PLATFORM EDITION 2.0 SPS03 REV36 (51053381)"
             ]
         },   
@@ -41,10 +40,7 @@
             "defaultValue": "SLES for SAP 12 SP3",
             "allowedValues": [
                 "SLES for SAP 12 SP3",
-                "SLES for SAP 12 SP2",
-                "RHEL 7.2 for SAP HANA",
-                "RHEL 7.3 for SAP HANA",
-                "RHEL 7.4 for SAP HANA"
+                "SLES for SAP 12 SP2"
             ]
         },
         "vmUserName": {
@@ -66,14 +62,14 @@
             "metadata": {
                 "description": "SAP HANA System ID"
             },
-            "defaultValue": "H10"
+            "defaultValue": "H01"
         },
         "hanaNumber": {
             "type": "string",
             "metadata": {
                 "description": "SAP HANA Instance Number"
             },
-            "defaultValue": "00"
+            "defaultValue": "01"
         },
         "vmSize": {
             "type": "string",
@@ -131,7 +127,7 @@
         "api-version": "2017-06-01",
         "api-version-vm": "2017-12-01",
         "mode": "Push",
-        "baseUri": "https://raw.githubusercontent.com/AzureCAT-GSI/SAP-HANA-ARM/master/",
+        "baseUri": "https://raw.githubusercontent.com/prasroy/hanaonazure/master/",
         "nicName": "[if (equals(parameters('IPAllocationMethod'),'Static'), concat(parameters('vmName'),'-static'), concat(parameters('vmName'),'-dynamic'))]",
         "subnetRef": "[parameters('HANASubnetRef')]",
         "OperatingSystemSpec": {

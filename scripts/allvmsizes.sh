@@ -311,7 +311,7 @@ echo "hana download start" >> /tmp/parameter.txt
 /usr/bin/wget --quiet $Uri/SapBits/${hanapackage}_part2.rar
 /usr/bin/wget --quiet $Uri/SapBits/${hanapackage}_part3.rar
 /usr/bin/wget --quiet $Uri/SapBits/${hanapackage}_part4.rar
-/usr/bin/wget --quiet "https://raw.githubusercontent.com/prasroy/sap-hana-automation/master/hdbinst.cfg"
+/usr/bin/wget --quiet "https://raw.githubusercontent.com/prasroy/hanaonazure/master/hdbinst.cfg"
 echo "hana download end" >> /tmp/parameter.txt
 
 date >> /tmp/testdate
@@ -333,8 +333,8 @@ sedcmd="s/REPLACE-WITH-HOSTNAME/$myhost/g"
 sedcmd2="s/\/hana\/shared\/sapbits\/51052325/\/hana\/data\/sapbits\/${hanapackage}/g"
 sedcmd3="s/root_user=root/root_user=$HANAUSR/g"
 sedcmd4="s/AweS0me@PW/$HANAPWD/g"
-sedcmd5="s/sid=H10/sid=$HANASID/g"
-sedcmd6="s/number=00/number=$HANANUMBER/g"
+sedcmd5="s/sid=H01/sid=$HANASID/g"
+sedcmd6="s/number=01/number=$HANANUMBER/g"
 cat hdbinst.cfg | sed $sedcmd | sed $sedcmd2 | sed $sedcmd3 | sed $sedcmd4 | sed $sedcmd5 | sed $sedcmd6 > hdbinst-local.cfg
 echo "hana preapre end" >> /tmp/parameter.txt
 
