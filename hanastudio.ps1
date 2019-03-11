@@ -41,7 +41,7 @@ param (
     .\putty-64bit-0.70-installer.msi /quiet
     
     write-host "extracting and installing HANA Studio"
-    .\sapcar.exe -xfv IMC_STUDIO2_212_2-80000323.SAR
+    .\sapcar_win.exe.EXE -xfv IMC_STUDIO2_212_2-80000323.SAR
     
     set PATH=%PATH%C:\Program Files\jdk-9.0.1\bin;
     set HDB_INSTALLER_TRACE_FILE=C:\Users\testuser\Documents\hdbinst.log
