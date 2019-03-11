@@ -34,7 +34,7 @@ param (
     .\7z.msi /quiet
     cd "C:\Program Files\7-Zip\"
     .\7z.exe e "C:\Program Files\jre-10.0.2_windows-x64_bin.tar.gz" "-oC:\Program Files"
-    .\7z.exe x -y "C:\Program Files\serverjre-9.0.1_windows-x64_bin.tar" "-oC:\Program Files"
+    .\7z.exe x -y "C:\Program Files\jre-10.0.2_windows-x64_bin.tar" "-oC:\Program Files"
     
     cd $hanapath
     write-host "installing PuTTY"
