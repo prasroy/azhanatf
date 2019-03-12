@@ -12,7 +12,7 @@
             "value": "Standard_E16s_v3 (128 GB)"
         },
         "NetworkName": {
-            "value": "pr-sap-hana-vnet"
+            "value": "sap-hana-vnet"
         },
         "addressPrefixes": {
             "value": "10.0.0.0/16"
@@ -42,10 +42,10 @@
             "value":  "SLES for SAP 12 SP3"
         },
         "HANASID": {
-            "value":  "H01"
+            "value":  "H10"
         },
         "HANANumber": {
-            "value": "01"
+            "value": "00"
         },
         "ExistingNetworkResourceGroup": {
             "value": "no"
