@@ -43,7 +43,7 @@
             "metadata": {
                 "description": "Username for the Virtual Machine"
             },
-            "defaultValue": "testuser"
+            "defaultValue": "clouduser"
         },
         "vmPassword": {
             "type": "securestring",
@@ -207,13 +207,7 @@
             "backup": 1023,
             "data1": 511,
             "data2": 511
-        },
-        "diskConfig_Standard_GS5": {
-            "shared": 511,
-            "sap": 63,
-            "backup": 1023,
-            "data1": 511,
-            "data2": 511
+        }
         },
         "internalAVSetObj": "[parameters('avSetObj')]"
     },
