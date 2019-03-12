@@ -30,7 +30,7 @@
             "value": "10.0.6.0/24"
         },
         "customURI": {
-            "value": "https://prlab.blob.core.windows.net/hanamedia/"            
+            "value": "https://<your_container_name>.blob.core.windows.net/hanamedia/"            
         },
         "VMUserName": {
             "value": "clouduser"
