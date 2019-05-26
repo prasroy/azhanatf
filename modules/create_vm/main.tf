@@ -28,16 +28,16 @@ resource "azurerm_virtual_machine" "mytfvm" {
             name = "${var.vmname}-datadisk1"
             caching = "None"
             create_option = "Empty"
-            managed_disk_type = "Standard_LRS"
-            disk_size_gb = 128
+            managed_disk_type = "Premium_LRS"
+            disk_size_gb = 512
             lun = 0
         }
         storage_data_disk { 
             name = "${var.vmname}-datadisk2"
             caching = "None"
             create_option = "Empty"
-            managed_disk_type = "Standard_LRS"
-            disk_size_gb = 128
+            managed_disk_type = "Premium_LRS"
+            disk_size_gb = 512
             lun = 1
         }
         storage_data_disk { 

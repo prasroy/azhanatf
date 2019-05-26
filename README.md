@@ -36,6 +36,16 @@ M128ms | 3.8TB | 5 x P30 | 2 x P20 | 1 x P30 | 1 x P6 | 1 x P6 | 5 x P50
 M208S_V2 | 2.85TB | 4 x P30 | 2 x P20 | 1 x P30 | 1 x P6 | 1 x P6 | 3 x P40
 M208ms_V2 | 5.7TB | 4 x P40 | 2 x P20 | 1 x P30 | 1 x P6 | 1 x P6 | 5 x P50
 
+## Disk SKU
+
+Premium_LRS = Premium Disks (P4, P6, P10, P15, P20, P30, P40, P50, P60, P70, P80)
+
+StandardSSD_LRS = Standard SSD (E4, E6, E10, E15, E20, E30, E40, E50, E60, E70, E80)
+
+Standard_LRS = Standard HDD (S4, S6, S10, S15, S20, S30, S40, S50, S60, S70, S80)
+
+
+
 ## Configuring for SAP HANA DATA and LOG Disks
 Virtual Machines for SAP HANA need to have specific storage configuration as mentioned below:
 
