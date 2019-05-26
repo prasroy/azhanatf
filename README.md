@@ -16,7 +16,7 @@ The template takes advantage of [Custom Script Extensions](https://github.com/Az
 The template currently deploys HANA on one of the machines listed in the table below with the noted disk configuration.  The deployment takes advantage of Managed Disks, for more information on Managed Disks or the sizes of the noted disks can be found on [this](https://docs.microsoft.com/en-us/azure/storage/storage-managed-disks-overview#pricing-and-billing) page.
 
 Machine Size | RAM | Max VM I/O Throughput |Data and Log Disks | /hana/shared | /root | /usr/sap | hana/backup
------------- | --- | ----------------------- | ------------ | ----- | -------- | ----------- | -----------
+------------ | --- | ------------------ | ------------ | -------- | ------ | ------ | -----------
 E16v3 | 128 GB | 384MB/s | 2 x P20 | 1 x S20 | 1 x S6 | 1 x S6 | 1 x S15
 E32v3 | 256 GB | 768MB/s | 2 x P20 | 1 x S20 | 1 x S6 | 1 x S6 | 1 x S20
 E64v3 | 432 GB | 1200MB/s | 2 x P20 | 1 x S20 | 1 x P6 | 1 x S6 | 1 x S30
