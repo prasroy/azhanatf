@@ -33,7 +33,7 @@ M64s | 1TB | 4 x P20 | 2 x P20 | 1 x P30 | 1 x P6 | 1 x P6 | 2 x P30
 M64ms | 1.7TB | 3 x P30 | 2 x P20 | 1 x P30 | 1 x P6 | 1 x P6 | 2 x P30
 M128S | 2TB | 3 x P30 | 2 x P20 | 1 x P30 | 1 x P6 | 1 x P6 | 2 x P40
 M128ms | 3.8TB | 5 x P30 | 2 x P20 | 1 x P30 | 1 x P6 | 1 x P6 | 5 x P50
-M208S_V2 | 2.85TB | 4 x P30 | 2 x P20 | 1 x P30 | 1 x P6 | 1 x P6 | 2 x P40
+M208S_V2 | 2.85TB | 4 x P30 | 2 x P20 | 1 x P30 | 1 x P6 | 1 x P6 | 3 x P40
 M208ms_V2 | 5.7TB | 4 x P40 | 2 x P20 | 1 x P30 | 1 x P6 | 1 x P6 | 5 x P50
 
 ## Configuring for SAP HANA DATA and LOG Disks
