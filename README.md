@@ -22,9 +22,10 @@ E32 | 256 GB | 2 x P20 | 1 x S20 | 1 x S6 | 1 x S6 | 1 x S20
 E64 | 432 GB | 2 x P20 | 1 x S20 | 1 x P6 | 1 x S6 | 1 x S30
 GS5 | 448 GB | 2 x P20 | 1 x S20 | 1 x P6 | 1 x S6 | 1 x S30
 
-For the M series servers, this template uses the [Write Accelerator](https://docs.microsoft.com/azure/virtual-machines/linux/how-to-enable-write-accelerator) feature for the Log disks. For this reason, the log devices are separated out from the data disks:
-Machine Size | RAM | Data and Log Disks | /hana/shared | /root | /usr/sap | hana/backup
------------- | --- | ------------------ | ------------ | ----- | -------- | -----------
+For the M series servers, this template uses the [Write Accelerator](https://docs.microsoft.com/azure/virtual-machines/linux/how-to-enable-write-accelerator) feature for the Log disks. For this reason, the log devices are separated out from the data disks.
+
+Machine Size | RAM | Data Disks | Log disks| /hana/shared | /root | /usr/sap | hana/backup
+------------ | --- | ------------------ | ------------------ |------------ | ----- | -------- | -----------
 M64s | 1TB | 4 x P20 | 2 x P20 | 1 x P30 | 1 x P6 | 1 x P6 | 2 x P30
 M64ms | 1.7TB | 3 x P30 | 2 x P20 | 1 x P30 | 1 x P6 | 1 x P6 | 2 x P30
 M128S | 2TB | 3 x P30 | 2 x P20 | 1 x P30 | 1 x P6 | 1 x P6 | 2 x P40
