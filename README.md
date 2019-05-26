@@ -1,11 +1,18 @@
-# SAP HANA ARM Installation
-This ARM template is used to install SAP HANA on a single VM running SUSE SLES 12 SP 3 or SLES 12 SP 2.
+# SAP HANA VM Provisioning with Terraform
+This template creates VM to deploy HANA database in Azure along with the necessary filesystems. If running for the first time install Terraform, create Service principal and set the environment variables as mentioned here https://docs.microsoft.com/bs-cyrl-ba/azure/virtual-machines/linux/terraform-install-configure
+
+Customize the values in parameters.tfvars file as required and run the below terraform commands in sequence.
+
+terraform init
+
+terraform plan -var-file="parameters.tfvars"
+
+terraform apply -var-file="parameters.tfvars"
 
 This template uses the Linux SKU for SAP. 
 The template takes advantage of [Custom Script Extensions](https://github.com/Azure/azure-linux-extensions/tree/master/CustomScript) for the installation and configuration of the machine. This should be used only for demonstration and sandbox environments. This is not a production deployment.
-[![Deploy to Azure](http://azuredeploy.net/deploybutton.png)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fprasroy%2Fhanaonazure%2Fmaster%2Fazuredeploy.json)
 
-## Machine Info
+## HANA Machine Info (Pre-Configured)
 The template currently deploys HANA on one of the machines listed in the table below with the noted disk configuration.  The deployment takes advantage of Managed Disks, for more information on Managed Disks or the sizes of the noted disks can be found on [this](https://docs.microsoft.com/en-us/azure/storage/storage-managed-disks-overview#pricing-and-billing) page.
 
 Machine Size | RAM | Data and Log Disks | /hana/shared | /root | /usr/sap | hana/backup
@@ -13,19 +20,13 @@ Machine Size | RAM | Data and Log Disks | /hana/shared | /root | /usr/sap | hana
 E16 | 128 GB | 2 x P20 | 1 x S20 | 1 x S6 | 1 x S6 | 1 x S15
 E32 | 256 GB | 2 x P20 | 1 x S20 | 1 x S6 | 1 x S6 | 1 x S20
 E64 | 432 GB | 2 x P20 | 1 x S20 | 1 x P6 | 1 x S6 | 1 x S30
+GS5 | 448 GB | 2 x P20 | 1 x S20 | 1 x P6 | 1 x S6 | 1 x S30
 
-## Installation Media
-Installation media for SAP HANA should be downloaded and placed in the SapBits folder. You will need to provide the URI for the container where they are stored, for example https://yourBlobName.blob.core.windows.net/yourContainerName. Specifically you need to download SAP package 51053381, which should consist of four files:
-```
-51053381_part1.exe
-51053381_part2.rar
-51053381_part3.rar
-51053381_part4.rar
-```
+For the M series servers, this template uses the [Write Accelerator](https://docs.microsoft.com/azure/virtual-machines/linux/how-to-enable-write-accelerator) feature for the Log disks. For this reason, the log devices are separated out from the data disks:
+Machine Size | RAM | Data and Log Disks | /hana/shared | /root | /usr/sap | hana/backup
+------------ | --- | ------------------ | ------------ | ----- | -------- | -----------
+M64s | 1TB | 4 x P20 | 2 x P20 | 1 x P30 | 1 x P6 | 1 x P6 | 2 x P30
+M64ms | 1.7TB | 3 x P30 | 2 x P20 | 1 x P30 | 1 x P6 | 1 x P6 | 2 x P30
+M128S | 2TB | 3 x P30 | 2 x P20 | 1 x P30 | 1 x P6 | 1 x P6 | 2 x P40
+M128ms | 3.8TB | 5 x P30 | 2 x P20 | 1 x P30 | 1 x P6 | 1 x P6 | 5 x P50
 
-Addtionally, if you wish to install a Windows-based Jumpbox with HANA Studio enabled, create a SAP_HANA_STUDIO folder under your SapBits folder and place the following packages:
-```
-
-IMC_STUDIO2_236_0-80000323.SAR
-sapcar.exe
-jre-10.0.2_windows-x64_bin.tar.gz
