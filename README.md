@@ -19,8 +19,8 @@ Machine Size | RAM | Max VM I/O Throughput |Data and Log Disks | /hana/shared | 
 ------------ | --- | -------------- | ------------ | ------- | ------ | ------- | ---------
 E16v3 | 128 GB | 384MB/s | 2 x P20 | 1 x S20 | 1 x S6 | 1 x S6 | 1 x S15
 E32v3 | 256 GB | 768MB/s | 2 x P20 | 1 x S20 | 1 x S6 | 1 x S6 | 1 x S20
-E64v3 | 432 GB | 1200MB/s | 2 x P20 | 1 x S20 | 1 x P6 | 1 x S6 | 1 x S30
-GS5 | 448 GB | 2000MB/s | 2 x P20 | 1 x S20 | 1 x P6 | 1 x S6 | 1 x S30
+E64v3 | 432 GB | 1200MB/s | 3 x P20 | 1 x S20 | 1 x P6 | 1 x S6 | 1 x S30
+GS5 | 448 GB | 2000MB/s | 3 x P20 | 1 x S20 | 1 x P6 | 1 x S6 | 1 x S30
 
 For the M series servers, this template uses the [Write Accelerator](https://docs.microsoft.com/azure/virtual-machines/linux/how-to-enable-write-accelerator) feature for the Log disks. For this reason, the log devices are separated out from the data disks.
 
