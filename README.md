@@ -47,10 +47,13 @@ Therefore, it is mandatory to leverage Azure Premium Disks for /hana/data and /h
 As stripe sizes for the RAID 0 the recommendation is to use:
 
 64 KB or 128 KB for /hana/data
+
 32 KB for /hana/log
 
 ## Caching recommendations on storage for SAP HANA
 
 /hana/data - no caching
+
 /hana/log - no caching - exception for M-Series (see later in this document)
+
 /hana/shared - read caching
