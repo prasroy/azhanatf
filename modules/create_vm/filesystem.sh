@@ -1,5 +1,5 @@
 #!/bin/bash
-#Author : Karthik Venkatraman
+#Author : Prasenjit Roy
 #set -x
 ######## Check Variables###############
 SID="$1"
@@ -62,11 +62,6 @@ case $SIZE in DEMO)
         mkdir -p /usr/sap/$SID
     else
         echo "/usr/sap directory exists"
-    fi
-    if [ ! -d "/sapmnt/${SID}" ];then
-        mkdir -p /sapmnt/$SID
-    else
-        echo "SAPMNT directory exists"
     fi
     echo "Directories created"
     # Create a backup of /etc/fstab

@@ -1,4 +1,4 @@
-resource "azurerm_virtual_machine" "mytfvm" {
+resource "azurerm_virtual_machine" "hanatfvm" {
     
     name = "${var.vmname}"
     location = "${var.location}"
@@ -82,7 +82,7 @@ resource "azurerm_virtual_machine" "mytfvm" {
                }
     }
 }
-resource "azurerm_virtual_machine_extension" "mytfvmext" {
+resource "azurerm_virtual_machine_extension" "hanatfvmext" {
 
     name                 = "${var.vmname}"
     location             = "${var.location}"
@@ -91,7 +91,7 @@ resource "azurerm_virtual_machine_extension" "mytfvmext" {
     publisher            = "Microsoft.Azure.Extensions"
     type                 = "CustomScript"
     type_handler_version = "2.0"
-    depends_on = ["azurerm_virtual_machine.mytfvm"]
+    depends_on = ["azurerm_virtual_machine.hanatfvm"]
     settings = <<SETTINGS
     {
       "commandToExecute" : "[ chmod 755 /tmp/filesystem.sh ; bash /tmp/filesystem.sh ${var.sid} DEMO >> /tmp/filesystem.out ]"
