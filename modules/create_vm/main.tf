@@ -24,7 +24,7 @@ resource "azurerm_virtual_machine" "mytfvm" {
         os_profile_linux_config{
             disable_password_authentication = "false"
         }
-        storage_data_disk { 
+        storage_data_log_disk { 
             name = "${var.vmname}-datadisk1"
             caching = "None"
             create_option = "Empty"
@@ -32,7 +32,7 @@ resource "azurerm_virtual_machine" "mytfvm" {
             disk_size_gb = 512
             lun = 0
         }
-        storage_data_disk { 
+        storage_data_log_disk { 
             name = "${var.vmname}-datadisk2"
             caching = "None"
             create_option = "Empty"
@@ -40,49 +40,37 @@ resource "azurerm_virtual_machine" "mytfvm" {
             disk_size_gb = 512
             lun = 1
         }
-        storage_data_disk { 
+        storage_hana_shared_disk { 
             name = "${var.vmname}-datadisk3"
-            caching = "None"
+            caching = "ReadOnly"
             create_option = "Empty"
             managed_disk_type = "Standard_LRS"
-            disk_size_gb = 128
+            disk_size_gb = 256
             lun = 2
         }
-        storage_data_disk { 
+        storage_root_disk { 
             name = "${var.vmname}-datadisk4"
             caching = "None"
             create_option = "Empty"
             managed_disk_type = "Standard_LRS"
-            disk_size_gb = 128
+            disk_size_gb = 64
             lun = 3
         }
-        storage_data_disk { 
+        storage_usr_sap_disk { 
             name = "${var.vmname}-datadisk5"
             caching = "None"
             create_option = "Empty"
-            disk_size_gb = 128
+            managed_disk_type = "Standard_LRS"
+            disk_size_gb = 64
             lun = 4
         }
-        storage_data_disk { 
+        storage_backup_disk { 
             name = "${var.vmname}-datadisk6"
             caching = "None"
             create_option = "Empty"
-            disk_size_gb = 128
+            managed_disk_type = "Standard_LRS"
+            disk_size_gb = 256
             lun = 5
-        }
-        storage_data_disk { 
-            name = "${var.vmname}-datadisk7"
-            caching = "None"
-            create_option = "Empty"
-            disk_size_gb = 128
-            lun = 6
-        }
-        storage_data_disk { 
-            name = "${var.vmname}-datadisk8"
-            caching = "None"
-            create_option = "Empty"
-            disk_size_gb = 128
-            lun = 7
         }
     provisioner "file" {
     source = "modules/create_vm/filesystem.sh"
