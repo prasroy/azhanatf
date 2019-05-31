@@ -20,6 +20,3 @@ variable "adminuser" {
 variable "adminpwd" {
     description = "OS Admin password"
 }
-variable "sid" {
-    description = "SAP System ID"
-}

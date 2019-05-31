@@ -24,53 +24,64 @@ resource "azurerm_virtual_machine" "hanatfvm" {
         os_profile_linux_config{
             disable_password_authentication = "false"
         }
-        storage_data_log_disk { 
+        storage_data_disk { 
             name = "${var.vmname}-datadisk1"
             caching = "None"
             create_option = "Empty"
             managed_disk_type = "Premium_LRS"
-            disk_size_gb = 512
+            disk_size_gb = 128
             lun = 0
         }
-        storage_data_log_disk { 
+        storage_data_disk { 
             name = "${var.vmname}-datadisk2"
             caching = "None"
             create_option = "Empty"
             managed_disk_type = "Premium_LRS"
-            disk_size_gb = 512
+            disk_size_gb = 128
             lun = 1
         }
-        storage_hana_shared_disk { 
+        storage_data_disk { 
             name = "${var.vmname}-datadisk3"
-            caching = "ReadOnly"
+            caching = "None"
             create_option = "Empty"
-            managed_disk_type = "Standard_LRS"
-            disk_size_gb = 256
+            managed_disk_type = "Premium_LRS"
+            disk_size_gb = 128
             lun = 2
         }
-        storage_root_disk { 
+        storage_data_disk { 
             name = "${var.vmname}-datadisk4"
             caching = "None"
             create_option = "Empty"
-            managed_disk_type = "Standard_LRS"
-            disk_size_gb = 64
+            managed_disk_type = "Premium_LRS"
+            disk_size_gb = 128
             lun = 3
         }
-        storage_usr_sap_disk { 
+        storage_data_disk { 
             name = "${var.vmname}-datadisk5"
-            caching = "None"
+            caching = "ReadOnly"
             create_option = "Empty"
-            managed_disk_type = "Standard_LRS"
-            disk_size_gb = 64
+            managed_disk_type = "StandardSSD_LRS"
+            disk_size_gb = 128
             lun = 4
         }
-        storage_backup_disk { 
+        storage_data_disk { 
             name = "${var.vmname}-datadisk6"
             caching = "None"
             create_option = "Empty"
-            managed_disk_type = "Standard_LRS"
-            disk_size_gb = 256
+            managed_disk_type = "StandardSSD_LRS"
+            disk_size_gb = 64
             lun = 5
+        }
+        storage_data_disk { 
+            name = "${var.vmname}-datadisk7"
+            caching = "None"
+            create_option = "Empty"
+            managed_disk_type = "StandardSSD_LRS"
+            disk_size_gb = 128
+            lun = 6
+        }
+        tags = {
+            environment = "demo"
         }
     provisioner "file" {
     source = "modules/create_vm/filesystem.sh"
@@ -94,7 +105,10 @@ resource "azurerm_virtual_machine_extension" "hanatfvmext" {
     depends_on = ["azurerm_virtual_machine.hanatfvm"]
     settings = <<SETTINGS
     {
-      "commandToExecute" : "[ chmod 755 /tmp/filesystem.sh ; bash /tmp/filesystem.sh ${var.sid} DEMO >> /tmp/filesystem.out ]"
+      "commandToExecute" : "[ chmod 755 /tmp/filesystem.sh ; bash /tmp/filesystem.sh ${var.vmsize} DEMO >> /tmp/filesystem.out ]"
     }
     SETTINGS
+    tags = {
+    environment = "demo"
+  }
 }
