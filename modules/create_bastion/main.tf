@@ -34,7 +34,18 @@ resource "azurerm_virtual_machine" "bastionvm" {
     os_profile_windows_config {
 
     }
-        tags = {
-            environment = "demo"
+    boot_diagnostics {
+        enabled     = "${var.boot_diagnostics}"
+        storage_uri = "${var.boot_diagnostics == "true" ? join(",", azurerm_storage_account.bastiondiag.*.primary_blob_endpoint) : "" }"
         }
+}
+resource "azurerm_storage_account" "bastiondiag" {
+    name = "diag${lower(var.bastionvm)}"
+    resource_group_name = "${var.rgname}"
+    location = "${var.location}"
+    account_tier = "${element(split("_", var.boot_diagnostics_sa_type),0)}"
+    account_replication_type = "${element(split("_", var.boot_diagnostics_sa_type),1)}"
+    tags = {
+        environemnt = "Demo"
+    }
 }

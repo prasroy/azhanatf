@@ -83,6 +83,10 @@ resource "azurerm_virtual_machine" "hanatfvm" {
         tags = {
             environment = "demo"
         }
+        boot_diagnostics {
+            enabled     = "${var.boot_diagnostics}"
+            storage_uri = "${var.boot_diagnostics == "true" ? join(",", azurerm_storage_account.hanadiag.*.primary_blob_endpoint) : "" }"
+        }
     provisioner "file" {
     source = "modules/create_vm/filesystem.sh"
     destination = "/tmp/filesystem.sh"
@@ -91,6 +95,16 @@ resource "azurerm_virtual_machine" "hanatfvm" {
         user = "${var.adminuser}"
         password = "${var.adminpwd}"
                }
+    }
+}
+resource "azurerm_storage_account" "hanadiag" {
+    name = "diag${lower(var.vmname)}"
+    resource_group_name = "${var.rgname}"
+    location = "${var.location}"
+    account_tier = "${element(split("_", var.boot_diagnostics_sa_type),0)}"
+    account_replication_type = "${element(split("_", var.boot_diagnostics_sa_type),1)}"
+    tags = {
+        environemnt = "Demo"
     }
 }
 resource "azurerm_virtual_machine_extension" "hanatfvmext" {
